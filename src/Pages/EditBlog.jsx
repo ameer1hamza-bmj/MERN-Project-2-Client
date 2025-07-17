@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../Store/Auth';
 import Loader from '../Components/UI/Loader';
 import { getBlogById, updateBlogById } from '../Api/authAPI';
+import toast from 'react-hot-toast';
 
 const EditBlog = () => {
   const { id } = useParams();
@@ -47,7 +48,7 @@ const EditBlog = () => {
   const mutation = useMutation({
     mutationFn: (formData) => updateBlogById(id, formData, authorization),
     onSuccess: (data) => {
-      alert('Blog updated successfully!');
+      toast.success('Blog updated successfully!');
       setFormData({
         thumbnail: null,
         title: '',
@@ -59,7 +60,7 @@ const EditBlog = () => {
       navigate('/profile');
     },
     onError: (error) => {
-      alert('Failed to update blog. Please try again.');
+      toast.error('Failed to update blog. Please try again.');
       console.log('Error updating blog:', error);
     },
   });

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../Store/Auth';
 import { useMutation } from '@tanstack/react-query';
 import { changePasswordApi } from '../Api/authAPI';
+import toast from 'react-hot-toast';
 
 const ChangePassword = () => {
   const [formData, setFormData] = useState({
@@ -23,11 +24,11 @@ const ChangePassword = () => {
     onSuccess: (data) => {
       console.log('Password changed successfully:', data);
       userAuthorization();
-      alert('Password changed successfully!');
+      toast.success('Password changed successfully!');
     },
     onError: (data) => {
       console.error('Error changing password:', data);
-      alert('Failed to change password. Please try again later.');
+      toast.error('Failed to change password. Please try again later.');
     }
   });
 

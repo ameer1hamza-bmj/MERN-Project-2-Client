@@ -5,6 +5,7 @@ import { useAuth } from '../Store/Auth';
 import { useMutation } from '@tanstack/react-query';
 import { loginData } from '../Api/authAPI';
 import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -22,12 +23,13 @@ const Login = () => {
     onSuccess: (data) => {
       storeToken(data.token);
       navigate('/');
+      toast.success('Login successful!');
     },
     onError: (error) => {
       if (error.response?.status === 401) {
-        alert('Invalid credentials');
+        toast.error('Invalid credentials');
       } else {
-        alert('Something went wrong');
+        toast.error('Something went wrong');
       }
     }
   });

@@ -4,6 +4,7 @@ import { useAuth } from '../Store/Auth'
 import { useNavigate, useParams } from 'react-router-dom'
 import Loader from '../Components/UI/Loader'
 import { getUserById, updateUserById } from '../Api/authAPI'
+import toast from 'react-hot-toast'
 
 const AdminUpdate = () => {
     const { id } = useParams()
@@ -37,7 +38,7 @@ const AdminUpdate = () => {
     const updateMutation = useMutation({
         mutationFn: (formData) => updateUserById(id, formData, authorization),
         onSuccess: () => {
-            alert('User info updated successfully!');
+            toast.success('User info updated successfully!');
             setFormData({
                 username: '',
                 email: '',
@@ -47,7 +48,7 @@ const AdminUpdate = () => {
             navigate('/admin/users')
         },
         onError: (err) => {
-            alert('Failed to update user info. Please try again.')
+            toast.error('Failed to update user info. Please try again.')
             console.error(err)
         }
     })

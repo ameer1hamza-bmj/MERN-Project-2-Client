@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { editProfileApi } from '../Api/authAPI';
 import { useAuth } from '../Store/Auth';
 import { useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast';
 
 const EditProfile = () => {
     const [formData, setFormData] = useState({
@@ -36,11 +37,11 @@ const EditProfile = () => {
             console.log('Profile updated successfully:', data);
             userAuthorization()
             navigate('/profile')
-            alert('Profile updated successfully!');
+            toast.success('Profile updated successfully!');
         },
         onError: (error) => {
             console.error('Error updating profile:', error);
-            alert('Failed to update profile. Please try again later.');
+            toast.error('Failed to update profile. Please try again later.');
         }
     })
 

@@ -5,6 +5,7 @@ import Loader from '../Components/UI/Loader';
 import { deleteBlogById, getAllBlogs } from '../Api/authAPI';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Store/Auth';
+import { toast } from 'react-hot-toast'
 
 const AdminBlogs = () => {
   const [page, setPage] = useState(1);
@@ -21,10 +22,10 @@ const AdminBlogs = () => {
     mutationFn: (id) => deleteBlogById(id, authorization),
     onSuccess: () => {
       queryClient.invalidateQueries(['adminBlogs']);
-      alert("Blog deleted successfully!");
+      toast.success("Blog deleted successfully!");
     },
     onError: (err) => {
-      alert("Failed to delete blog. Please try again.");
+      toast.error("Failed to delete blog. Please try again.");
       console.log(err);
     }
   });
@@ -94,11 +95,10 @@ const AdminBlogs = () => {
         <button
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
-          className={`px-5 py-2 rounded-md text-sm font-medium transition-colors ${
-            page === 1
-              ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
-              : 'bg-purple-600 hover:bg-purple-700 text-white'
-          }`}
+          className={`px-5 py-2 rounded-md text-sm font-medium transition-colors ${page === 1
+            ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
+            : 'bg-purple-600 hover:bg-purple-700 text-white'
+            }`}
         >
           Previous
         </button>
@@ -108,11 +108,10 @@ const AdminBlogs = () => {
         <button
           onClick={() => setPage((prev) => prev + 1)}
           disabled={page >= data?.totalPages}
-          className={`px-5 py-2 rounded-md text-sm font-medium transition-colors ${
-            page >= data?.totalPages
-              ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
-              : 'bg-purple-600 hover:bg-purple-700 text-white'
-          }`}
+          className={`px-5 py-2 rounded-md text-sm font-medium transition-colors ${page >= data?.totalPages
+            ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
+            : 'bg-purple-600 hover:bg-purple-700 text-white'
+            }`}
         >
           Next
         </button>

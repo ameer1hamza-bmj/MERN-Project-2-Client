@@ -5,6 +5,7 @@ import { useMutation } from '@tanstack/react-query'
 import { registerData } from '../Api/authAPI'
 import { useAuth } from '../Store/Auth'
 import { useNavigate, Link } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 const Register = () => {
   const [formData, setFormData] = useState({ username: '', email: '', password: '' })
@@ -19,12 +20,15 @@ const Register = () => {
 
   const mutation = useMutation({
     mutationFn: (formData) => registerData(formData, storeToken),
-    onSuccess: () => navigate('/'),
+    onSuccess: () => {
+      navigate('/')
+      toast.success('Registration successful! Welcome Blogify!')
+    },
     onError: (error) => {
       if (error.response?.status === 409) {
-        alert('User already exists')
+        toast.success('User already exists')
       } else {
-        alert('Registration failed')
+        toast.success('Registration failed')
       }
     }
   })

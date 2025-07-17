@@ -5,6 +5,7 @@ import { adminDeleteUserById, adminGetAllUsers } from '../Api/authAPI';
 import { useAuth } from '../Store/Auth';
 import Loader from '../Components/UI/Loader';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const AdminUsers = () => {
   const [page, setPage] = useState(1);
@@ -21,10 +22,10 @@ const AdminUsers = () => {
     mutationFn: (id) => adminDeleteUserById(id, authorization),
     onSuccess: () => {
       queryClient.invalidateQueries(['adminUsers']);
-      alert('User deleted successfully!');
+      toast.success('User deleted successfully!');
     },
     onError: () => {
-      alert('Failed to delete user. Please try again.');
+      toast.error('Failed to delete user. Please try again.');
     }
   });
 
@@ -116,11 +117,10 @@ const AdminUsers = () => {
         <button
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
-          className={`px-5 py-2 rounded-md text-sm font-medium transition-colors ${
-            page === 1
+          className={`px-5 py-2 rounded-md text-sm font-medium transition-colors ${page === 1
               ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
               : 'bg-purple-600 hover:bg-purple-700 text-white'
-          }`}
+            }`}
         >
           Previous
         </button>
@@ -130,11 +130,10 @@ const AdminUsers = () => {
         <button
           onClick={() => setPage((prev) => prev + 1)}
           disabled={page >= data.totalPages}
-          className={`px-5 py-2 rounded-md text-sm font-medium transition-colors ${
-            data.length < 10
+          className={`px-5 py-2 rounded-md text-sm font-medium transition-colors ${data.length < 10
               ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
               : 'bg-purple-600 hover:bg-purple-700 text-white'
-          }`}
+            }`}
         >
           Next
         </button>

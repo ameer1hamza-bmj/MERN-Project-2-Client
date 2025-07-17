@@ -6,6 +6,7 @@ import Loader from '../Components/UI/Loader';
 import { deleteBlogById, getBlogOfAuther } from '../Api/authAPI';
 import { Pencil, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
 
 const Profile = () => {
   const { user, API, authorization } = useAuth();
@@ -28,10 +29,10 @@ const Profile = () => {
     mutationFn: (id) => deleteBlogById(id, authorization),
     onSuccess: () => {
       queryClient.invalidateQueries(['myBlogs']);
-      alert("Blog deleted successfully!");
+      toast.success("Blog deleted successfully!");
     },
     onError: () => {
-      alert("Failed to delete blog. Please try again.");
+      toast.error("Failed to delete blog. Please try again.");
     }
   });
 

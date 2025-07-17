@@ -4,6 +4,7 @@ import { FileText, ImagePlus, Tags, Tag, PencilLine } from 'lucide-react'
 import { useMutation } from '@tanstack/react-query'
 import { useAuth } from '../Store/Auth'
 import { postBlog } from '../Api/authAPI'
+import toast from 'react-hot-toast'
 
 const CreateBlog = () => {
   const [formData, setFormData] = useState({
@@ -29,7 +30,7 @@ const CreateBlog = () => {
     mutationFn: (formData) => postBlog(formData, authorization),
     onSuccess: (data) => {
       console.log("Blog created successfully:", data)
-      alert("Blog created successfully!")
+      toast.success("Blog created successfully!")
       setFormData({
         title: '',
         content: '',
@@ -40,7 +41,7 @@ const CreateBlog = () => {
     },
     onError: (error) => {
       console.error("Error creating blog:", error)
-      alert("Failed to create blog. Please try again.")
+      toast.error("Failed to create blog. Please try again.")
     }
   })
 
