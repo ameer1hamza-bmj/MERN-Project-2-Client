@@ -75,11 +75,7 @@ const Blogs = () => {
         {/* Blog Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
           {filteredBlogs.map((blog, index) => {
-            const imageURL = blog.thumbnail.startsWith('http')
-              ? blog.thumbnail
-              : `${IMAGE_URI}${blog.thumbnail}`;
-            console.log('Thumbnail:', blog.thumbnail);
-            console.log('Full URL:', `${IMAGE_URI}${blog.thumbnail}`);
+       
 
             return (
               <motion.div
@@ -90,7 +86,7 @@ const Blogs = () => {
                 className="bg-[#1f1f1f] rounded-3xl shadow-[0_8px_30px_rgba(124,58,237,0.15)] hover:shadow-[0_8px_40px_rgba(124,58,237,0.4)] transition duration-300 overflow-hidden"
               >
                 <img
-                  src={imageURL} alt={blog.title}
+                  src={blog.thumbnail} alt={blog.title}
                   className="w-full h-52 sm:h-56 md:h-60 object-cover hover:scale-[1.02] transition-transform duration-300"
                 />
                 <div className="p-5 sm:p-6">
