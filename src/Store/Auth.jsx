@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const authorization = `Bearer ${token}`
     const API = import.meta.env.VITE_API_BASE_URI
+    const IMAGE_URI = import.meta.env.VITE_IMAGE_BASE_URI
 
 
 
@@ -69,7 +70,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn: !!token, storeToken, token, logoutUser, isLoading, user, authorization, API, userAuthorization }}>
+        <AuthContext.Provider value={{ isLoggedIn: !!token, storeToken, token, logoutUser, isLoading, user, authorization, API, userAuthorization, IMAGE_URI }}>
             {children}
         </AuthContext.Provider>
     )

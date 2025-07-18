@@ -5,7 +5,9 @@ import Loader from '../Components/UI/Loader';
 import { deleteBlogById, getAllBlogs } from '../Api/authAPI';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../Store/Auth';
-import { toast } from 'react-hot-toast'
+import { toast } from 'react-hot-toast';
+
+const IMAGE_URI = import.meta.env.VITE_IMAGE_URI; // e.g., https://your-backend.up.railway.app/uploads/
 
 const AdminBlogs = () => {
   const [page, setPage] = useState(1);
@@ -56,7 +58,11 @@ const AdminBlogs = () => {
             className="bg-gradient-to-br from-[#1e1e1e] to-[#2a2a2a] rounded-xl overflow-hidden shadow-lg hover:shadow-purple-800 transition-all hover:scale-[1.02]"
           >
             <img
-              src={blog.thumbnail}
+              src={
+                blog.thumbnail.startsWith("http")
+                  ? blog.thumbnail
+                  : `${IMAGE_URI}${blog.thumbnail}`
+              }
               alt={blog.title}
               className="w-full h-40 object-cover"
             />
@@ -95,10 +101,11 @@ const AdminBlogs = () => {
         <button
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
           disabled={page === 1}
-          className={`px-5 py-2 rounded-md text-sm font-medium transition-colors ${page === 1
-            ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
-            : 'bg-purple-600 hover:bg-purple-700 text-white'
-            }`}
+          className={`px-5 py-2 rounded-md text-sm font-medium transition-colors ${
+            page === 1
+              ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
+              : 'bg-purple-600 hover:bg-purple-700 text-white'
+          }`}
         >
           Previous
         </button>
@@ -108,10 +115,11 @@ const AdminBlogs = () => {
         <button
           onClick={() => setPage((prev) => prev + 1)}
           disabled={page >= data?.totalPages}
-          className={`px-5 py-2 rounded-md text-sm font-medium transition-colors ${page >= data?.totalPages
-            ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
-            : 'bg-purple-600 hover:bg-purple-700 text-white'
-            }`}
+          className={`px-5 py-2 rounded-md text-sm font-medium transition-colors ${
+            page >= data?.totalPages
+              ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
+              : 'bg-purple-600 hover:bg-purple-700 text-white'
+          }`}
         >
           Next
         </button>

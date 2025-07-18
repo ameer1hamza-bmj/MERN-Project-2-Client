@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 
 const Profile = () => {
-  const { user, API, authorization } = useAuth();
+  const { user, API, authorization, IMAGE_URI } = useAuth(); // ✅ IMAGE_URI added here
   const queryClient = useQueryClient();
 
   const profile = {
@@ -121,49 +121,55 @@ const Profile = () => {
 
         {data?.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data.map((blog, index) => (
-              <motion.div
-                key={blog._id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="bg-[#1f1f1f] p-5 rounded-2xl shadow-lg hover:shadow-purple-700/30 transition duration-300"
-              >
-                <img
-                  src={blog.thumbnail}
-                  alt={blog.title}
-                  className="h-40 w-full object-cover rounded-xl mb-4"
-                />
-                <h4 className="text-lg font-semibold mb-2">{blog.title}</h4>
-                <p className="text-sm text-gray-400 line-clamp-3">
-                  {blog.content.slice(0, 150)}...
-                </p>
-                <Link
-                  to={`/blogs/${blog._id}`}
-                  className="text-[#7c3aed] hover:text-[#9333ea] text-sm font-medium block mt-3"
-                >
-                  Read More →
-                </Link>
+            {data.map((blog, index) => {
+              const imageURL = blog.thumbnail?.startsWith('http')
+                ? blog.thumbnail
+                : `${IMAGE_URI}${blog.thumbnail}`;
 
-                {/* Action Buttons */}
-                <div className="flex gap-4 mt-4">
+              return (
+                <motion.div
+                  key={blog._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="bg-[#1f1f1f] p-5 rounded-2xl shadow-lg hover:shadow-purple-700/30 transition duration-300"
+                >
+                  <img
+                    src={imageURL}
+                    alt={blog.title}
+                    className="h-40 w-full object-cover rounded-xl mb-4"
+                  />
+                  <h4 className="text-lg font-semibold mb-2">{blog.title}</h4>
+                  <p className="text-sm text-gray-400 line-clamp-3">
+                    {blog.content.slice(0, 150)}...
+                  </p>
                   <Link
-                    to={`/edit/${blog._id}`}
-                    className="flex items-center gap-1 text-[#7c3aed] hover:text-[#9333ea] text-sm font-medium"
+                    to={`/blogs/${blog._id}`}
+                    className="text-[#7c3aed] hover:text-[#9333ea] text-sm font-medium block mt-3"
                   >
-                    <Pencil className="w-4 h-4" />
-                    Edit
+                    Read More →
                   </Link>
-                  <button
-                    onClick={() => handleBlogDelete(blog._id)}
-                    className="flex items-center gap-1 text-red-500 hover:text-red-700 text-sm font-medium"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    Delete
-                  </button>
-                </div>
-              </motion.div>
-            ))}
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-4 mt-4">
+                    <Link
+                      to={`/edit/${blog._id}`}
+                      className="flex items-center gap-1 text-[#7c3aed] hover:text-[#9333ea] text-sm font-medium"
+                    >
+                      <Pencil className="w-4 h-4" />
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => handleBlogDelete(blog._id)}
+                      className="flex items-center gap-1 text-red-500 hover:text-red-700 text-sm font-medium"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Delete
+                    </button>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         ) : (
           <p className="text-gray-400 text-center mt-12">No blogs posted yet.</p>

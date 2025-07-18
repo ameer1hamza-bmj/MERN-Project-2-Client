@@ -5,9 +5,11 @@ import { Link } from 'react-router-dom';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getAllBlogs } from '../Api/authAPI';
 import Loader from '../Components/UI/Loader';
+import { useAuth } from '../Store/Auth';
 
 const Blogs = () => {
   const [searchBlogs, setSearchBlogs] = useState('');
+  const { IMAGE_URI } = useAuth(); // ✅ use correct variable name
 
   const {
     data: Allblogs,
@@ -72,38 +74,45 @@ const Blogs = () => {
 
         {/* Blog Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-          {filteredBlogs.map((blog, index) => (
-            <motion.div
-              key={blog._id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05, duration: 0.4 }}
-              className="bg-[#1f1f1f] rounded-3xl shadow-[0_8px_30px_rgba(124,58,237,0.15)] hover:shadow-[0_8px_40px_rgba(124,58,237,0.4)] transition duration-300 overflow-hidden"
-            >
-              <img
-                src={blog.thumbnail}
-                alt={blog.title}
-                className="w-full h-52 sm:h-56 md:h-60 object-cover hover:scale-[1.02] transition-transform duration-300"
-              />
-              <div className="p-5 sm:p-6">
-                <div className="flex items-center gap-2 mb-3">
-                  <BookOpen className="text-[#7c3aed] w-5 h-5" />
-                  <h3 className="text-lg font-semibold text-[#f5f5f5] line-clamp-1">
-                    {blog.title}
-                  </h3>
+          {filteredBlogs.map((blog, index) => {
+            const imageURL = blog.thumbnail.startsWith('http')
+              ? blog.thumbnail
+              : `${IMAGE_URI}${blog.thumbnail}`;
+            console.log('Thumbnail:', blog.thumbnail);
+            console.log('Full URL:', `${IMAGE_URI}${blog.thumbnail}`);
+
+            return (
+              <motion.div
+                key={blog._id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05, duration: 0.4 }}
+                className="bg-[#1f1f1f] rounded-3xl shadow-[0_8px_30px_rgba(124,58,237,0.15)] hover:shadow-[0_8px_40px_rgba(124,58,237,0.4)] transition duration-300 overflow-hidden"
+              >
+                <img
+                  src={imageURL} alt={blog.title}
+                  className="w-full h-52 sm:h-56 md:h-60 object-cover hover:scale-[1.02] transition-transform duration-300"
+                />
+                <div className="p-5 sm:p-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <BookOpen className="text-[#7c3aed] w-5 h-5" />
+                    <h3 className="text-lg font-semibold text-[#f5f5f5] line-clamp-1">
+                      {blog.title}
+                    </h3>
+                  </div>
+                  <p className="text-sm text-gray-400 mb-4 line-clamp-3">
+                    {blog.content.slice(0, 200)}...
+                  </p>
+                  <Link
+                    to={`/blogs/${blog._id}`}
+                    className="text-sm font-medium inline-block bg-gradient-to-r from-[#7c3aed] to-[#9333ea] bg-clip-text text-transparent hover:underline"
+                  >
+                    Read More →
+                  </Link>
                 </div>
-                <p className="text-sm text-gray-400 mb-4 line-clamp-3">
-                  {blog.content.slice(0, 200)}...
-                </p>
-                <Link
-                  to={`/blogs/${blog._id}`}
-                  className="text-sm font-medium inline-block bg-gradient-to-r from-[#7c3aed] to-[#9333ea] bg-clip-text text-transparent hover:underline"
-                >
-                  Read More →
-                </Link>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Load More Button */}
